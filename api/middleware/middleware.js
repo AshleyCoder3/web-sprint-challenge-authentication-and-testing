@@ -18,9 +18,8 @@ const checkUserNameTaken = async (req,res,next) =>{
 }
 const validateInput = async (req, res, next)=>{
     try{
-        const {username} = req.body;
-        const {password} = req.body;
-        if(!password && !username){
+        const {username, password} = req.body;
+        if(!username || !password){
             next({
                 message: 'username and password are required',
                 status: 422
