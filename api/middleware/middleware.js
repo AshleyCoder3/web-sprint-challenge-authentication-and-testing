@@ -31,16 +31,6 @@ const validateInput = async (req, res, next)=>{
         next(err)
     }
 }
-const checkUserExisits = async (req,res,next) => {
-  try{
-      const {username} = req.body;
-
-
-  }catch(err){
-      next(err)
-  }
-}
-
 
 module.exports = {
     checkUserNameTaken,

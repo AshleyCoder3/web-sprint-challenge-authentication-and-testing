@@ -5,7 +5,7 @@ const {checkUserNameTaken, validateInput} = require('../middleware/middleware')
 const tokenBuilder = require('../middleware/tokenBuilder')
 
 
-router.post('/register',checkUserNameTaken, validateInput, async (req, res, next) => {
+router.post('/register', validateInput, checkUserNameTaken, async (req, res, next) => {
   let users = req.body
   const rounds = process.env.BCRYPT_ROUNDS || 8
   const hash = bcrypt.hashSync( users.password, rounds)

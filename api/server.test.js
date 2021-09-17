@@ -6,13 +6,6 @@ beforeAll(async()=>{
   await db.migrate.rollback()
   await db.migrate.latest()
 })
-
-beforeEach(async ()=>{
-  await db.seed.run()
-})
-afterAll(async ()=>{
-  await db.seed.run()
-})
 afterAll(async ()=>{
   await db.destroy()
 })
@@ -22,14 +15,35 @@ test('sanity', () => {
 })
 
 describe('[POST] /register', ()=>{
-  // test('', async ()=>{})
-  // test('', async ()=>{})
+   test('responds with new user', async ()=>{
+     const res = await request(server)
+         .post('/api/auth/register')
+         .send({username: "foo", password: "bar"})
+       expect(res.body).toMatchObject({id:1, username:'foo'})
+   })
+   test('responds with 422 "username and password are required" when no password is provided',
+       async ()=>{
+           const res = await request(server)
+               .post('/api/auth/register')
+               .send({username: 'doctor'})
+           expect(res.status).toBe(422)
+       })
 })
 describe('[POST] /login', ()=>{
-  // test('', async ()=>{})
-  // test('', async ()=>{})
-})
-describe('[GET] /', ()=>{
-  // test('', async ()=>{})
-  // test('', async ()=>{})
+   test('respond with 200 when user login', async ()=>{
+       const res = await request(server)
+           .post('/api/auth/register')
+           .send({username: "foo", password: "bar"})
+       expect(res.status).toBe(201)
+       const user = await request(server)
+           .post('/api/auth/login')
+           .send({username: "foo", password: "bar"})
+       expect(user.status).toBe(200)
+   })
+   test('respond with 401 if wrong credentials',async ()=>{
+       const res = await request(server)
+           .post('/api/auth/login')
+           .send({username: "bob", password: "2222"})
+       expect(res.status).toBe(401)
+   })
 })
